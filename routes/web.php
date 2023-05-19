@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\GoogleController;
+use App\Http\Controllers\GithubController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -21,6 +22,9 @@ Route::get('/', function () {
 
 Route::get('/auth/google/redirect', [GoogleController::class, 'handleRedirect'])->name('google.redirect');
 Route::get('/auth/google/callback', [GoogleController::class, 'handleCallback'])->name('google.callback');
+
+Route::get('/auth/github/redirect', [GithubController::class, 'handleRedirect'])->name('github.redirect');
+Route::get('/auth/github/callback', [GithubController::class, 'handleCallback'])->name('github.callback');
 
 Route::get('/dashboard', function () {
     return view('dashboard');

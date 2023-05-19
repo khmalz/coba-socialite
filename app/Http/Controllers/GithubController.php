@@ -2,37 +2,38 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use Exception;
+use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
 
-class GoogleController extends Controller
+class GithubController extends Controller
 {
     public function handleRedirect()
     {
-        return Socialite::driver('google')->redirect();
+        return Socialite::driver('github')->redirect();
     }
 
     public function handleCallback()
     {
         try {
-            $googleUser = Socialite::driver('google')->user();
+            $githubUser = Socialite::driver('github')->user();
 
-            $findUser = User::where('email', $googleUser->getEmail())->first();
+            $findUser = User::where('email', $githubUser->getEmail())->first();
 
             if ($findUser) {
                 // Jika pengguna dengan email yang sama sudah ada dalam database
-                $findUser->google_id = $googleUser->getId();
-                $findUser->type_login = 'google';
+                $findUser->github_id = $githubUser->getId();
+                $findUser->type_login = 'github';
                 $findUser->save();
             } else {
                 // Jika pengguna dengan email yang sama belum ada dalam database
                 $findUser = User::create([
-                    'name' => $googleUser->getName(),
-                    'email' => $googleUser->getEmail(),
-                    'google_id' => $googleUser->getId(),
-                    'type_login' => 'google',
+                    'name' => $githubUser->getName(),
+                    'email' => $githubUser->getEmail(),
+                    'github_id' => $githubUser->getId(),
+                    'type_login' => 'github',
                     'password' => bcrypt('pass123')
                 ]);
             }
